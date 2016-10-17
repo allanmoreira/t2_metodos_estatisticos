@@ -12,6 +12,6 @@
 hs_err_pid*
 
 T2MetodosEstatisticos/T2MetodosEstatisticos.iml
-T2MetodosEstatisticos/out
-T2MetodosEstatisticos/target
-T2MetodosEstatisticos/.idea
+T2MetodosEstatisticos/out/
+T2MetodosEstatisticos/target/
+T2MetodosEstatisticos/.idea/
