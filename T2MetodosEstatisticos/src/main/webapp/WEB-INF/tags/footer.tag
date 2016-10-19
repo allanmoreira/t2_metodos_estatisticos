@@ -10,7 +10,7 @@
 <script src="<c:url value="/static/docs/assets/js/docs.min.js" />"></script>
 <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
 <script src="<c:url value="/static/docs/assets/js/ie10-viewport-bug-workaround.js" />"></script>
-<script src="<c:url value="/static/ajax/menu.js" />"></script>
+<script src="<c:url value="/static/ajax/valida_formularios.js" />"></script>
 <script src="<c:url value="/static/ajax/waitingDialog.js" />"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-package logica;
+package util.arquivo;
 
 /**
  * Created by allanmoreira on 16/10/16.

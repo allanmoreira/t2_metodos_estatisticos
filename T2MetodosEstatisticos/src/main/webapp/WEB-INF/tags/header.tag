@@ -58,6 +58,7 @@
             <ul class="nav navbar-nav">
                 <li id="item_lista_dados_populacionais"><a href="#" id="link_dados_populacionais">Dados Populacionais</a></li>
                 <li id="item_lista_param_populacionais"><a href="#" id="link_param_populacionais">Parâmetros Populacionais</a></li>
+                <li id="item_lista_comport_estim"><a href="#" id="link_comport_estim">Comportamento Estimadores</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>

@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-striped" id="tabela_dados_populacionais">
+            <table class="table table-striped table-bordered" id="tabela_dados_populacionais">
                 <thead>
                 <tr>
                     <th>#</th>
@@ -19,7 +19,13 @@
                 </tr>
                 </thead>
                 <tbody>
-
+                    <c:forEach var="listaDados" items="${listaDados}">
+                        <tr>
+                            <td>${listaDados.id}</td>
+                            <td>${listaDados.idade}</td>
+                            <td>${listaDados.candidato}</td>
+                        </tr>
+                    </c:forEach>
                 </tbody>
             </table>
         </div>

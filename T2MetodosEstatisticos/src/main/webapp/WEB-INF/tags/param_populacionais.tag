@@ -2,20 +2,23 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <div id="div_tabela_param_populacionais" style="display:none">
+    <a class="btn btn-primary btn-lg" id="botao_param_pop" role="button">Learn more »</a>
+
     <div class="page-header">
         <h1>Parâmetros Populacionais</h1>
     </div>
 
     <div class="row">
         <div class="col-md-12">
-            <table class="table table-striped" id="tabela_param_populacionais">
+            <table class="table table-striped table-bordered" id="tabela_param_populacionais">
                 <thead>
                 <tr>
                     <th>Candidato</th>
                     <th>Qtde Votos</th>
                     <th>% Votos</th>
                     <th>Idade Média</th>
-                    <th>Username</th>
+                    <th>Variância</th>
+                    <th>Desvio-Padrão da Idade</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,4 +27,50 @@
             </table>
         </div>
     </div>
+
+
+
+    <div class="page-header">
+        <h1>Tabelas de Frequência</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="page-header">
+                <h4>Candidato A</h4>
+            </div>
+            <table class="table table-striped table-bordered" id="tabela_freq_A">
+                <thead>
+                <tr>
+                    <th>i</th>
+                    <th>Xi</th>
+                    <th>fi</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-6">
+            <div class="page-header">
+                <h4>Candidato C</h4>
+            </div>
+            <table class="table table-striped table-bordered" id="tabela_freq_C">
+                <thead>
+                <tr>
+                    <th>i</th>
+                    <th>Xi</th>
+                    <th>fi</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 </div>
+

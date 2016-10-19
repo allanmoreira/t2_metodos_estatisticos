@@ -20,6 +20,7 @@
     <h:home/>
     <h:dados_populacionais/>
     <h:param_populacionais/>
+    <h:comport_estim/>
 
 </div> <!-- /container -->
 

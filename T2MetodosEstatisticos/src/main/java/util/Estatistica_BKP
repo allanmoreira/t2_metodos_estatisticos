@@ -1,0 +1,105 @@
+package util;
+
+import logica.Frequencia;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.*;
+
+/**
+ * Created by allanmoreira on 16/10/16.
+ */
+public class Estatistica_BKP extends Calculo {
+
+    public BigDecimal media(ArrayList<Integer> listaIdade){
+        double soma = 0;
+        for (Integer idade : listaIdade)
+            soma+= idade;
+        BigDecimal resultado = divide(new BigDecimal(soma), new BigDecimal(listaIdade.size()));
+        return resultado;
+    }
+
+    public ArrayList<Frequencia> tabelaFrequencia(ArrayList<Integer> lista){
+        HashMap<Integer, Integer> tabela = new HashMap<Integer, Integer>();
+        ArrayList<Frequencia> listaFreq = new ArrayList<Frequencia>();
+        int cont = 1;
+        for (int i = 0; i < lista.size(); i++) {
+            int idade = lista.get(i);
+            if(tabela.containsKey(idade))
+                tabela.put(idade, tabela.get(idade) + 1);
+            else
+                tabela.put(idade, 1);
+        }
+
+        for (int s : tabela.keySet()) {
+            int fi = tabela.get(s);
+            Frequencia frequencia = new Frequencia(s, fi, cont++);
+            listaFreq.add(frequencia);
+        }
+
+        return listaFreq;
+    }
+
+    public BigDecimal variancia(ArrayList<Frequencia> lista, BigDecimal media, BigDecimal N){
+        BigDecimal resultado = new BigDecimal(0);
+
+        for (Frequencia f : lista) {
+
+            resultado = soma(
+                resultado,
+                    multiplica(
+                        potencia(
+                            subtrai(
+                                new BigDecimal(f.getXi()),
+                                media),
+                        2),
+                    new BigDecimal(f.getFi()))
+            );
+        }
+        return divide(resultado, subtrai(N, new BigDecimal(1)));
+    }
+
+    public BigDecimal desvioPadrao(BigDecimal valor){
+        BigDecimal resultado = raiz(valor, 2);
+        resultado = resultado.setScale(CASAS_DECIMAIS, RoundingMode.HALF_EVEN);
+        return resultado;
+    }
+
+    public BigDecimal pChapeu(BigDecimal media, BigDecimal desvioPadrao, BigDecimal n, BigDecimal N){
+        HashMap<BigDecimal, BigDecimal> xNormal = new HashMap<BigDecimal, BigDecimal>(1);
+
+        BigDecimal desvioPadraoXBarra =
+                multiplica(
+                        divide(
+                                desvioPadrao,
+                                raiz(N, 2)
+                        ),
+                        raiz(
+                                divide(
+                                    subtrai(N, n),
+                                    subtrai(N, new BigDecimal(1))
+                        ),2)
+                );
+        return desvioPadraoXBarra;
+    }
+
+    public double pChapeu(double media, double desvioPadrao, double n, double N){
+//        HashMap<Double, Double> xNormal = new HashMap<Double, Double>(1);
+
+        double desvioPadraoXBarra =(desvioPadrao / Math.sqrt(2)) * Math.sqrt((N-n)/(N-1));
+
+        return desvioPadraoXBarra;
+    }
+
+    public ArrayList<Frequencia> extraiAmostrasAleatorias(ArrayList<Frequencia> tabelaFrequencia) {
+        ArrayList<Frequencia> numeros = tabelaFrequencia;
+        ArrayList<Frequencia> listaResultado = new ArrayList<Frequencia>();
+        //Embaralhamos os números:
+        Collections.shuffle(numeros);
+        //Mostramos 6 aleatórios
+        for (int i = 0; i < 15; i++)
+            listaResultado.add(numeros.get(i));
+
+        return listaResultado;
+    }
+}

@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class LeituraArquivo {
 
     public ArrayList<Dados> ler(String nomeArq) throws IOException {
-        ArrayList<Dados> listaDados = new ArrayList<>();
+        ArrayList<Dados> listaDados = new ArrayList<Dados>();
         int id = 1;
 
         try {
