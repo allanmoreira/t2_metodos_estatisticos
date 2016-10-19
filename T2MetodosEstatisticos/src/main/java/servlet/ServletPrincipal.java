@@ -32,9 +32,50 @@ public class ServletPrincipal {
     private ArrayList<Integer> listaIdadeCandC;
     private ArrayList<Frequencia> tabelaFreqA;
     private ArrayList<Frequencia> tabelaFreqC;
+    private double mediaA;
+    private double qtdeVotosA;
+    private double proporcaoVotosA;
+    private double varianciaA;
+    private double desvioPadraoA;
+    private double mediaC;
+    private double qtdeVotosC;
+    private double proporcaoVotosC;
+    private double varianciaC;
+    private double desvioPadraoC;
 
     private void parametrosPopulacionais() throws UnsupportedEncodingException {
         listaDados = new LeituraPlanilha().lerPlanilha();
+
+        Estatistica estatistica = new Estatistica();
+
+        listaIdadeCandA = new ArrayList<Integer>();
+        listaIdadeCandC = new ArrayList<Integer>();
+
+        for (Dados d : listaDados)
+            if (d.getCandidato().equals("A"))
+                listaIdadeCandA.add(d.getIdade());
+            else if (d.getCandidato().equals("C"))
+                listaIdadeCandC.add(d.getIdade());
+
+        mediaA = estatistica.media(listaIdadeCandA);
+        qtdeVotosA = listaIdadeCandA.size();
+        proporcaoVotosA = 100 * (qtdeVotosA/listaDados.size());
+        proporcaoVotosA = Estatistica.arredonda(proporcaoVotosA, 4);
+        System.out.println("QTDE VOTOS: " + qtdeVotosA);
+        System.out.println("LISTA DADOS: " + listaDados.size());
+        tabelaFreqA = estatistica.tabelaFrequencia(listaIdadeCandA);
+        Ordenacao.bubbleSortOtimizado(tabelaFreqA);
+        varianciaA = estatistica.variancia(tabelaFreqA, mediaA, listaDados.size());
+        desvioPadraoA = estatistica.desvioPadrao(varianciaA);
+        // ----------------------------------------------------------------
+        mediaC = estatistica.media(listaIdadeCandC);
+        qtdeVotosC = listaIdadeCandC.size();
+        proporcaoVotosC = 100 * (qtdeVotosC/listaDados.size());
+        proporcaoVotosC = Estatistica.arredonda(proporcaoVotosC, 4);
+        tabelaFreqC = estatistica.tabelaFrequencia(listaIdadeCandC);
+        Ordenacao.bubbleSortOtimizado(tabelaFreqC);
+        varianciaC = estatistica.variancia(tabelaFreqC, mediaC, listaDados.size());
+        desvioPadraoC = estatistica.desvioPadrao(varianciaC);
     }
 
     @RequestMapping("home")
@@ -53,32 +94,6 @@ public class ServletPrincipal {
         map = new HashMap<String, Object>();
         boolean isValid = true;
         String msgErro = null;
-        Estatistica estatistica = new Estatistica();
-
-        listaIdadeCandA = new ArrayList<Integer>();
-        listaIdadeCandC = new ArrayList<Integer>();
-
-        for (Dados d : listaDados)
-            if (d.getCandidato().equals("A"))
-                listaIdadeCandA.add(d.getIdade());
-            else if (d.getCandidato().equals("C"))
-                listaIdadeCandC.add(d.getIdade());
-
-        double mediaA = estatistica.media(listaIdadeCandA);
-        int qtdeVotosA = listaIdadeCandA.size();
-        double proporcaoVotosA = 100 * (qtdeVotosA/listaIdadeCandA.size());
-        tabelaFreqA = estatistica.tabelaFrequencia(listaIdadeCandA);
-        Ordenacao.bubbleSortOtimizado(tabelaFreqA);
-        double varianciaA = estatistica.variancia(tabelaFreqA, mediaA, listaDados.size());
-        double desvioPadraoA = estatistica.desvioPadrao(varianciaA);
-        // ----------------------------------------------------------------
-        double mediaC = estatistica.media(listaIdadeCandC);
-        int qtdeVotosC = listaIdadeCandC.size();
-        double proporcaoVotosC = 100 * (qtdeVotosC/listaIdadeCandC.size());
-        tabelaFreqC = estatistica.tabelaFrequencia(listaIdadeCandC);
-        Ordenacao.bubbleSortOtimizado(tabelaFreqC);
-        double varianciaC = estatistica.variancia(tabelaFreqC, mediaC, listaDados.size());
-        double desvioPadraoC = estatistica.desvioPadrao(varianciaC);
 
         map.put("isValid", isValid);
         map.put("msgErro", msgErro);
@@ -105,26 +120,21 @@ public class ServletPrincipal {
 
     @RequestMapping("comport_estimadores")
     public void comportamentoEstimadores(HttpServletResponse response) throws IOException {
-        map = new HashMap<String, Object>();
+        map = new HashMap<>();
         boolean isValid = true;
         String msgErro = null;
         Estatistica estatistica = new Estatistica();
 
-//        ArrayList<Frequencia> amostra1 = estatistica.extraiAmostrasAleatorias(tabelaFreqA);
-//        ArrayList<Integer> listaAmostras = new ArrayList<Integer>(amostra1.size());
-
-//        for (Frequencia f : amostra1)
-//            listaAmostras.add(f.getXi());
-
-//        double media = estatistica.media(listaAmostras);
-
-        List<Set<Frequencia>> subConjutos = estatistica.subConjutos(tabelaFreqA, 15, 500);
+        List<Set<Frequencia>> subConjutos = estatistica.subConjutos(tabelaFreqA, 15);
 
         ArrayList<Estimador> listaEstimadores;
         listaEstimadores = estatistica.comportamentoEstimadores(subConjutos, 500, estatistica.media(listaIdadeCandA));
 
+        double mediaTeoria = estatistica.mediaTeoria(listaEstimadores);
+        double pChapeuTeoria = estatistica.pChapeuTeoria(desvioPadraoA, 15, tabelaFreqA.size());
         map.put("isValid", isValid);
         map.put("msgErro", msgErro);
+        map.put("pChapeuTeoria", pChapeuTeoria);
         map.put("listaEstimadores", listaEstimadores);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");

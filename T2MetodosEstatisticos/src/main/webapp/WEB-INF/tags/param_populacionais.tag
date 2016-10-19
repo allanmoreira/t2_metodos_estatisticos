@@ -5,7 +5,7 @@
     <a class="btn btn-primary btn-lg" id="botao_param_pop" role="button">Learn more »</a>
 
     <div class="page-header">
-        <h1>Parâmetros Populacionais</h1>
+        <h2>Parâmetros Populacionais</h2>
     </div>
 
     <div class="row">
@@ -31,7 +31,7 @@
 
 
     <div class="page-header">
-        <h1>Tabelas de Frequência</h1>
+        <h2>Tabelas de Frequência</h2>
     </div>
 
     <div class="row">

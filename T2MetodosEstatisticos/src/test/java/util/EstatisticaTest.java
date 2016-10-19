@@ -70,6 +70,12 @@ public class EstatisticaTest {
     }
 
     @Test
+    public void testPChapeuTeoria() throws Exception {
+        double v = estatistica.pChapeuTeoria(17.078, 2, 6);
+        System.out.println("pChapeuTeoria: " + v);
+    }
+
+    @Test
     public void testPChapeuDouble() throws Exception {
 //        Estatistica estatistica = new Estatistica();
 //        System.out.println(estatistica.pChapeu(45, 17.078, 2, 6));

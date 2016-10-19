@@ -5,7 +5,7 @@
     <a class="btn btn-primary btn-lg" id="botao_dados_pop" role="button">Learn more »</a>
 
     <div class="page-header">
-        <h1>Dados Populacionais</h1>
+        <h2>Dados Populacionais</h2>
     </div>
 
     <div class="row">

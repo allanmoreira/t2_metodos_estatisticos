@@ -37,6 +37,12 @@ $(function() {
     });
 });
 
+$(function() {
+    $('#botao_atualizar_comportam').click(function() {
+        comport_estimadores();
+    });
+});
+
 function dadosPopulacionais() {
     // waitingDialog.show();setTimeout(function () {waitingDialog.hide();}, 3000);
     $('#div_home').hide(1000);
@@ -103,6 +109,9 @@ function ajaxParamPopulacionais(){
 
                 var listaFreqA = data.tabelaFreqA;
                 var cont = 1;
+                $('#tabela_freq_A tbody').remove();
+                $('#tabela_freq_C tbody').remove();
+
                 $.each(listaFreqA, function (i) {
                     $('#tabela_freq_A').append(
                         "<tr>" +
@@ -151,7 +160,9 @@ function ajaxComportamEstimadores(){
             if(data.isValid){
                 var cont = 1;
                 var lista = data.listaEstimadores;
+                var pChapeuTeoria = data.pChapeuTeoria;
                 var linha_tabela;
+                $("#tabela_comport_estim tbody").remove();
                 $.each(lista, function (i) {
                     linha_tabela =
                         "<tr>" +
@@ -170,6 +181,9 @@ function ajaxComportamEstimadores(){
                     $('#tabela_comport_estim').append(linha_tabela);
                     cont++;
                 });
+
+                $('#td_tabela_analise_media').val();
+                $('#td_tabela_analise_dp').html(pChapeuTeoria);
             }
             else {
                 $.bootstrapGrowl(data.msgErro, {

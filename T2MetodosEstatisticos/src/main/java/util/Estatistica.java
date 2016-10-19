@@ -22,6 +22,13 @@ public class Estatistica {
         return arredonda(soma/listaIdade.size());
     }
 
+    public double mediaDouble(ArrayList<Double> lista){
+        double soma = 0;
+        for (Double valor : lista)
+            soma+= valor;
+        return arredonda(soma/lista.size());
+    }
+
     public ArrayList<Frequencia> tabelaFrequencia(ArrayList<Integer> lista){
         HashMap<Integer, Integer> tabela = new HashMap<Integer, Integer>();
         ArrayList<Frequencia> listaFreq = new ArrayList<Frequencia>();
@@ -58,7 +65,6 @@ public class Estatistica {
 
     public ArrayList<Estimador> comportamentoEstimadores(List<Set<Frequencia>> subConjutos, int nAmostras, double media) {
         ArrayList<Double> mediaDosCjtos = new ArrayList<>();
-        ArrayList<Frequencia> listaFrequencias = new ArrayList<>();
         ArrayList<Integer> listaIdades;
         ArrayList<Estimador> listaEstimadores = new ArrayList<>();
 
@@ -68,6 +74,7 @@ public class Estatistica {
         double xBarra = 0;
         for (Set<Frequencia> conjuntoFrequencia: subConjutos) {
 
+            ArrayList<Frequencia> listaFrequencias = new ArrayList<>();
             listaIdades = new ArrayList<>(conjuntoFrequencia.size());
 
             for (Frequencia f : conjuntoFrequencia) {
@@ -80,12 +87,9 @@ public class Estatistica {
             listaListaFrequencias.add(listaFrequencias);
         }
 
-//        double variancia = variancia(listaFrequencias, xbarra, N);
-//        double desvioPadrao = desvioPadrao(variancia);
-
         for (int i = 0; i < mediaDosCjtos.size(); i++) {
             double pChapeu = pChapeu(media, nAmostras, listaMediaCjtos.get(i));
-            Estimador estimador = new Estimador(xBarra, pChapeu, listaListaFrequencias.get(i));
+            Estimador estimador = new Estimador(mediaDosCjtos.get(i), pChapeu, listaListaFrequencias.get(i));
             listaEstimadores.add(estimador);
         }
         return listaEstimadores;
@@ -93,35 +97,47 @@ public class Estatistica {
 
     public double pChapeu(double media, int nAmostras, ArrayList<Double> listaMedias) {
         double soma = 0;
-        for (Double i : listaMedias) {
-            soma+= Math.pow(i - media, 2);
+        for (Double mediaConjto : listaMedias) {
+            soma+= Math.pow(mediaConjto - media, 2);
         }
 
         return arredonda(Math.sqrt(soma/nAmostras));
     }
 
-    public double pChapeuTeoria(double media, double desvioPadrao, double n, double N){
+    public double pChapeuTeoria(double desvioPadrao, double n, double N){
 //        HashMap<Double, Double> xNormal = new HashMap<Double, Double>(1);
 
-        double desvioPadraoXBarra = (desvioPadrao / Math.sqrt(2)) * Math.sqrt((N-n)/(N-1));
+        double desvioPadraoXBarra = (desvioPadrao / Math.sqrt(n)) * Math.sqrt((N-n)/(N-1));
 
         return arredonda(desvioPadraoXBarra, 2);
 //        return desvioPadraoXBarra;
     }
 
-    public ArrayList<Frequencia> extraiAmostrasAleatorias(ArrayList<Frequencia> tabelaFrequencia) {
+    public double mediaTeoria(ArrayList<Estimador> listaMediaEstimadores){
+        double soma = 0;
+        for (Estimador estimador: listaMediaEstimadores)
+            soma+= estimador.getMedia();
+        return arredonda(soma/listaMediaEstimadores.size());
+    }
+
+    public List<Set<Frequencia>> extraiAmostrasAleatorias(ArrayList<Frequencia> tabelaFrequencia) {
         ArrayList<Frequencia> numeros = tabelaFrequencia;
-        ArrayList<Frequencia> listaResultado = new ArrayList<Frequencia>();
+        Set<Frequencia> listaResultado = null;
+        List<Set<Frequencia>> subConjutos = new ArrayList<>();
+
         //Embaralhamos os números:
         Collections.shuffle(numeros);
         //Mostramos 6 aleatórios
-        for (int i = 0; i < 15; i++)
-            listaResultado.add(numeros.get(i));
+        for (int j = 0; j < 15; j++) {
+            listaResultado = new HashSet<>();
+            listaResultado.add(numeros.get(j));
+        }
+        subConjutos.add(listaResultado);
 
-        return listaResultado;
+        return subConjutos;
     }
 
-    private double arredonda(double valor){
+    public double arredonda(double valor){
         return new BigDecimal(valor).setScale(4, RoundingMode.HALF_EVEN).doubleValue();
     }
 
@@ -137,6 +153,7 @@ public class Estatistica {
 
     public List<Set<Frequencia>> subConjutos(List<Frequencia> conjunto, int tamanho, int qtdeAmostras) {
         List<Set<Frequencia>> listaSubConjuntos = new ArrayList<>();
+        Collections.shuffle(conjunto);
         subConjutos(conjunto, tamanho, 0, new HashSet<Frequencia>(), listaSubConjuntos, qtdeAmostras);
         return listaSubConjuntos;
     }
@@ -166,5 +183,34 @@ public class Estatistica {
         subConjutos(conjunto, tamanho, indice+1, conjuntoAtual, listaSubConjuntos, qtdeAmostras);
     }
 
+    public List<Set<Frequencia>> subConjutos(List<Frequencia> conjunto, int tamanho) {
+        List<Set<Frequencia>> listaSubConjuntos = new ArrayList<>();
+        Collections.shuffle(conjunto);
+        subConjutos(conjunto, tamanho, 0, new HashSet<Frequencia>(), listaSubConjuntos);
+        return listaSubConjuntos;
+    }
+
+    private void subConjutos(List<Frequencia> conjunto,
+                             int tamanho, int indice,
+                             Set<Frequencia> conjuntoAtual,
+                             List<Set<Frequencia>> listaSubConjuntos) {
+
+        // se o conjunto está cheio, retorna
+        if (conjuntoAtual.size() == tamanho) {
+            listaSubConjuntos.add(new HashSet<>(conjuntoAtual));
+            return;
+        }
+
+        //unseccessful stop clause
+        if (indice == conjunto.size())
+            return;
+        Frequencia x = conjunto.get(indice);
+        conjuntoAtual.add(x);
+        // "supondo" que x está no subconjunto
+        subConjutos(conjunto, tamanho, indice+1, conjuntoAtual, listaSubConjuntos);
+        conjuntoAtual.remove(x);
+        //"supondo" que x não está no subconjunto
+        subConjutos(conjunto, tamanho, indice+1, conjuntoAtual, listaSubConjuntos);
+    }
 
 }
