@@ -1,7 +1,7 @@
 package util;
 
 import logica.Dados;
-import logica.Frequencia;
+import logica.IntervConfianca;
 import org.junit.Before;
 import org.junit.Test;
 import util.arquivo.LeituraPlanilha;
@@ -64,21 +64,21 @@ public class EstatisticaTest {
         }};
 
         double xbarra = estatistica.media(lista);
-        double valor = estatistica.pChapeu(xbarra, 500, listaDouble);
+//        double valor = estatistica.pChapeuTeorema(xbarra, 500, listaDouble);
 
-        System.out.println("VALOR P-CHAPEU = " + valor);
+//        System.out.println("VALOR P-CHAPEU = " + valor);
     }
 
     @Test
     public void testPChapeuTeoria() throws Exception {
-        double v = estatistica.pChapeuTeoria(17.078, 2, 6);
-        System.out.println("pChapeuTeoria: " + v);
+        double v = estatistica.pChapeuXNormal(17.078, 2, 6);
+        System.out.println("pChapeuXNormal: " + v);
     }
 
     @Test
     public void testPChapeuDouble() throws Exception {
 //        Estatistica estatistica = new Estatistica();
-//        System.out.println(estatistica.pChapeu(45, 17.078, 2, 6));
+//        System.out.println(estatistica.pChapeuTeorema(45, 17.078, 2, 6));
     }
 
     @Test
@@ -142,5 +142,18 @@ public class EstatisticaTest {
         List<Set<String>> res = new ArrayList<>();
         getSubsets(superSet, tamanho, 0, new HashSet<String>(), res, qtdeAmostras);
         return res;
+    }
+
+    @Test
+    public void testIntervConfianca() throws Exception {
+        IntervConfianca intervConfianca = estatistica.intervaloDeConfianca(35, 17.078, 6, 2);
+        System.out.println(intervConfianca.getIdadeDe());
+        System.out.println(intervConfianca.getIdadeAte());
+    }
+
+    @Test
+    public void testDouble() throws Exception {
+        double res = 2000/1.960;
+        System.out.println(res);
     }
 }

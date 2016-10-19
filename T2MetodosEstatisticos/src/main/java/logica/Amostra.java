@@ -5,13 +5,13 @@ import java.util.ArrayList;
 /**
  * Created by allanmoreira on 19/10/16.
  */
-public class Estimador {
-    private double media, pChapeu;
+public class Amostra {
+    private double media;
     private ArrayList<Frequencia> listaFrequencias;
+    private IntervConfianca intervConfianca;
 
-    public Estimador(double media, double pChapeu, ArrayList<Frequencia> listaFrequencias) {
+    public Amostra(double media, ArrayList<Frequencia> listaFrequencias) {
         this.media = media;
-        this.pChapeu = pChapeu;
         this.listaFrequencias = listaFrequencias;
     }
 
@@ -23,19 +23,19 @@ public class Estimador {
         this.media = media;
     }
 
-    public double getpChapeu() {
-        return pChapeu;
-    }
-
-    public void setpChapeu(double pChapeu) {
-        this.pChapeu = pChapeu;
-    }
-
     public ArrayList<Frequencia> getListaFrequencias() {
         return listaFrequencias;
     }
 
     public void setListaFrequencias(ArrayList<Frequencia> listaFrequencias) {
         this.listaFrequencias = listaFrequencias;
+    }
+
+    public IntervConfianca getIntervConfianca() {
+        return intervConfianca;
+    }
+
+    public void setIntervConfianca(IntervConfianca intervConfianca) {
+        this.intervConfianca = intervConfianca;
     }
 }

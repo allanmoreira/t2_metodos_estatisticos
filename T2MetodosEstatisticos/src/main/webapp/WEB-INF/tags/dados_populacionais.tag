@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <div id="div_tabela_dados_populacionais" style="display:none">
-    <a class="btn btn-primary btn-lg" id="botao_dados_pop" role="button">Learn more »</a>
+    <a class="btn btn-primary btn-lg" id="botao_dados_pop" role="button">Encontrar os parâmetros populacionais »</a>
 
     <div class="page-header">
         <h2>Dados Populacionais</h2>

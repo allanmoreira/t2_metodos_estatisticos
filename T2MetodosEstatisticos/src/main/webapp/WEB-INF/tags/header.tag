@@ -27,6 +27,8 @@
     <!-- Custom styles for this template -->
     <link href="<c:url value="/static/docs/examples/theme/theme.css"/>" rel="stylesheet">
 
+    <link rel="stylesheet" href="<c:url value="/static/ajax/aguardar_ajax.css" />">
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -37,6 +39,13 @@
 
 
 <body>
+
+<div id="div_aguardar_ajax" class="modal_aguardar_ajax">
+    <div style="top: 30%; left: 45%; position: fixed";
+         class="navbar navbar-fixed-top" role="navigation">
+        <img class="img_vertical_aguardar_ajax" src="<c:url value="/static/ajax/please_wait.gif" />" alt="carregando">
+    </div>
+</div>
 
 <!-- Fixed navbar -->
 <nav class="navbar navbar-inverse navbar-fixed-top">

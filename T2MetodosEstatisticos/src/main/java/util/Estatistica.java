@@ -1,7 +1,8 @@
 package util;
 
-import logica.Estimador;
+import logica.Amostra;
 import logica.Frequencia;
+import logica.IntervConfianca;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,14 +20,14 @@ public class Estatistica {
         double soma = 0;
         for (Integer idade : listaIdade)
             soma+= idade;
-        return arredonda(soma/listaIdade.size());
+        return arredonda(soma/listaIdade.size(), 4);
     }
 
     public double mediaDouble(ArrayList<Double> lista){
         double soma = 0;
         for (Double valor : lista)
             soma+= valor;
-        return arredonda(soma/lista.size());
+        return arredonda(soma/lista.size(), 4);
     }
 
     public ArrayList<Frequencia> tabelaFrequencia(ArrayList<Integer> lista){
@@ -56,17 +57,17 @@ public class Estatistica {
             resultado = (resultado + (((Math.pow(f.getXi() - media,2))) * f.getFi()));
 
         resultado = resultado/(N-1);
-        return arredonda(resultado);
+        return arredonda(resultado, 4);
     }
 
     public double desvioPadrao(double variancia){
-        return arredonda(Math.sqrt(variancia));
+        return arredonda(Math.sqrt(variancia), 4);
     }
 
-    public ArrayList<Estimador> comportamentoEstimadores(List<Set<Frequencia>> subConjutos, int nAmostras, double media) {
+    public ArrayList<Amostra> comportamentoEstimadores(List<Set<Frequencia>> subConjutos, int nAmostras, double media) {
         ArrayList<Double> mediaDosCjtos = new ArrayList<>();
         ArrayList<Integer> listaIdades;
-        ArrayList<Estimador> listaEstimadores = new ArrayList<>();
+        ArrayList<Amostra> listaAmostras = new ArrayList<>();
 
         List<ArrayList<Double>> listaMediaCjtos = new ArrayList<>();
         List<ArrayList<Frequencia>> listaListaFrequencias = new ArrayList<>();
@@ -88,23 +89,22 @@ public class Estatistica {
         }
 
         for (int i = 0; i < mediaDosCjtos.size(); i++) {
-            double pChapeu = pChapeu(media, nAmostras, listaMediaCjtos.get(i));
-            Estimador estimador = new Estimador(mediaDosCjtos.get(i), pChapeu, listaListaFrequencias.get(i));
-            listaEstimadores.add(estimador);
+            Amostra amostra = new Amostra(mediaDosCjtos.get(i), listaListaFrequencias.get(i));
+            listaAmostras.add(amostra);
         }
-        return listaEstimadores;
+        return listaAmostras;
     }
 
-    public double pChapeu(double media, int nAmostras, ArrayList<Double> listaMedias) {
+    public double pChapeuTeorema(double mediaAmostral, int nAmostras, ArrayList<Amostra> listaAmostras) {
         double soma = 0;
-        for (Double mediaConjto : listaMedias) {
-            soma+= Math.pow(mediaConjto - media, 2);
+        for (Amostra amostra : listaAmostras) {
+            soma+= Math.pow(amostra.getMedia() - mediaAmostral, 2);
         }
 
-        return arredonda(Math.sqrt(soma/nAmostras));
+        return arredonda(Math.sqrt(soma/nAmostras), 4);
     }
 
-    public double pChapeuTeoria(double desvioPadrao, double n, double N){
+    public double pChapeuXNormal(double desvioPadrao, double n, double N){
 //        HashMap<Double, Double> xNormal = new HashMap<Double, Double>(1);
 
         double desvioPadraoXBarra = (desvioPadrao / Math.sqrt(n)) * Math.sqrt((N-n)/(N-1));
@@ -113,11 +113,23 @@ public class Estatistica {
 //        return desvioPadraoXBarra;
     }
 
-    public double mediaTeoria(ArrayList<Estimador> listaMediaEstimadores){
+    public IntervConfianca intervaloDeConfianca(double media, double desvioPadrao, double N, double n){
+        double parcial = intervaloDeConfianca0(desvioPadrao, N, n);
+        double idadeDe = media - parcial;
+        double idadeAte = media + parcial;
+        return new IntervConfianca(arredonda(idadeDe, 4), arredonda(idadeAte, 4));
+    }
+
+    private double intervaloDeConfianca0(double desvioPadrao, double N, double n){
+        double resultado = 1.960 * (desvioPadrao/Math.sqrt(n)) * Math.sqrt((N-n) / (N-1));
+        return arredonda(resultado, 4);
+    }
+
+    public double mediaTeorema(ArrayList<Amostra> listaMediaEstimadores){
         double soma = 0;
-        for (Estimador estimador: listaMediaEstimadores)
-            soma+= estimador.getMedia();
-        return arredonda(soma/listaMediaEstimadores.size());
+        for (Amostra amostra : listaMediaEstimadores)
+            soma+= amostra.getMedia();
+        return arredonda(soma/listaMediaEstimadores.size(), 4);
     }
 
     public List<Set<Frequencia>> extraiAmostrasAleatorias(ArrayList<Frequencia> tabelaFrequencia) {
@@ -137,9 +149,9 @@ public class Estatistica {
         return subConjutos;
     }
 
-    public double arredonda(double valor){
-        return new BigDecimal(valor).setScale(4, RoundingMode.HALF_EVEN).doubleValue();
-    }
+//    public double arredonda(double valor){
+//        return new BigDecimal(valor).setScale(4, RoundingMode.HALF_EVEN).doubleValue();
+//    }
 
     public static double arredonda(double valor, int casasDecimais) {
         if (casasDecimais < 0)

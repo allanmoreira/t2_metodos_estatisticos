@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <div id="div_tabela_param_populacionais" style="display:none">
-    <a class="btn btn-primary btn-lg" id="botao_param_pop" role="button">Learn more »</a>
+    <a class="btn btn-primary btn-lg" id="botao_param_pop" role="button">Verificar o Comportamento dos Estimadores »</a>
 
     <div class="page-header">
         <h2>Parâmetros Populacionais</h2>
@@ -27,8 +27,6 @@
             </table>
         </div>
     </div>
-
-
 
     <div class="page-header">
         <h2>Tabelas de Frequência</h2>

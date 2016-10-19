@@ -1,6 +1,13 @@
 /**
  * Created by allanmoreira on 16/10/16.
  */
+$body = $("body");
+$(document).ajaxStart(function(){
+    $body.addClass("loading_aguardar_ajax");
+}).ajaxStop(function(){
+    $body.removeClass("loading_aguardar_ajax");
+});
+
 $(function() {
     $('#botao_comecar').click(function() {
         dadosPopulacionais();
@@ -73,7 +80,6 @@ function comport_estimadores() {
     $('#item_lista_comport_estim').addClass("active");
     ajaxComportamEstimadores();
 }
-
 
 function ajaxParamPopulacionais(){
     $.ajax({
@@ -159,31 +165,32 @@ function ajaxComportamEstimadores(){
         success: function (data) {
             if(data.isValid){
                 var cont = 1;
-                var lista = data.listaEstimadores;
-                var pChapeuTeoria = data.pChapeuTeoria;
+                var listaAmostras = data.listaAmostras;
                 var linha_tabela;
                 $("#tabela_comport_estim tbody").remove();
-                $.each(lista, function (i) {
+                $.each(listaAmostras, function (i) {
                     linha_tabela =
                         "<tr>" +
                             "<td>" + cont + "</td>" +
                             "<td>";
                                 var conteudo_amostra = '';
-                                var listaAmostra = lista[i].listaFrequencias;
+                                var listaAmostra = listaAmostras[i].listaFrequencias;
                                 $.each(listaAmostra, function (j) {
                                     conteudo_amostra += listaAmostra[j].xi + ", ";
                                 });
 
                             linha_tabela+= conteudo_amostra + "</td>" +
-                            "<td>" + lista[i].media + "</td>" +
-                            "<td>" + lista[i].pChapeu + "</td>" +
+                            "<td>" + listaAmostras[i].media + "</td>" +
+                            "<td>" + listaAmostras[i].intervConfianca.idadeDe + " - " + listaAmostras[i].intervConfianca.idadeAte + "</td>" +
                         "</tr>";
                     $('#tabela_comport_estim').append(linha_tabela);
                     cont++;
                 });
 
-                $('#td_tabela_analise_media').val();
-                $('#td_tabela_analise_dp').html(pChapeuTeoria);
+                $('#td_tabela_analise_media').html(data.mediaTeorema);
+                $('#td_tabela_analise_dp').html(data.pChapeuTeorema);
+                $('#td_tabela__dp_xnormal').html(data.pChapeuXNormal);
+                $('#td_tabela_media_xnormal').html(data.mediaA);
             }
             else {
                 $.bootstrapGrowl(data.msgErro, {

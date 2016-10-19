@@ -2,21 +2,19 @@ package servlet;
 
 import com.google.gson.Gson;
 import logica.Dados;
-import logica.Estimador;
+import logica.Amostra;
 import logica.Frequencia;
+import logica.IntervConfianca;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import util.Calculo;
 import util.Estatistica;
 import util.Ordenacao;
 import util.arquivo.LeituraPlanilha;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -61,8 +59,6 @@ public class ServletPrincipal {
         qtdeVotosA = listaIdadeCandA.size();
         proporcaoVotosA = 100 * (qtdeVotosA/listaDados.size());
         proporcaoVotosA = Estatistica.arredonda(proporcaoVotosA, 4);
-        System.out.println("QTDE VOTOS: " + qtdeVotosA);
-        System.out.println("LISTA DADOS: " + listaDados.size());
         tabelaFreqA = estatistica.tabelaFrequencia(listaIdadeCandA);
         Ordenacao.bubbleSortOtimizado(tabelaFreqA);
         varianciaA = estatistica.variancia(tabelaFreqA, mediaA, listaDados.size());
@@ -125,17 +121,26 @@ public class ServletPrincipal {
         String msgErro = null;
         Estatistica estatistica = new Estatistica();
 
-        List<Set<Frequencia>> subConjutos = estatistica.subConjutos(tabelaFreqA, 15);
+        List<Set<Frequencia>> subConjutos = estatistica.subConjutos(tabelaFreqA, 15, 500);
 
-        ArrayList<Estimador> listaEstimadores;
-        listaEstimadores = estatistica.comportamentoEstimadores(subConjutos, 500, estatistica.media(listaIdadeCandA));
+        ArrayList<Amostra> listaAmostras = estatistica.comportamentoEstimadores(subConjutos, 500, estatistica.media(listaIdadeCandA));
 
-        double mediaTeoria = estatistica.mediaTeoria(listaEstimadores);
-        double pChapeuTeoria = estatistica.pChapeuTeoria(desvioPadraoA, 15, tabelaFreqA.size());
+        double mediaTeorema = estatistica.mediaTeorema(listaAmostras);
+        double pChapeuTeorema = estatistica.pChapeuTeorema(mediaTeorema, 500, listaAmostras);
+        double pChapeuXNormal = estatistica.pChapeuXNormal(desvioPadraoA, 15, tabelaFreqA.size());
+
+        for (Amostra amostra : listaAmostras) {
+            IntervConfianca intervConfianca = estatistica.intervaloDeConfianca(amostra.getMedia(), desvioPadraoA, 5000, 15);
+            amostra.setIntervConfianca(intervConfianca);
+        }
+
         map.put("isValid", isValid);
         map.put("msgErro", msgErro);
-        map.put("pChapeuTeoria", pChapeuTeoria);
-        map.put("listaEstimadores", listaEstimadores);
+        map.put("mediaA", mediaA);
+        map.put("pChapeuXNormal", pChapeuXNormal);
+        map.put("pChapeuTeorema", pChapeuTeorema);
+        map.put("mediaTeorema", mediaTeorema);
+        map.put("listaAmostras", listaAmostras);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(new Gson().toJson(map));

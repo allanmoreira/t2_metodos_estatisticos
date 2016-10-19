@@ -6,78 +6,80 @@
     <div class="page-header">
         <h2 class="text-center">
             Comportamento dos Estimadores Para as Idades <br>
-            das Pessoas que Votaram no Candidato "A"</h2>
+            das Pessoas que Votaram no <strong>Candidato "A"</strong></h2>
     </div>
 
-    <%--
-    <div class="blog-post">
-        <h2 class="blog-post-title">Sample blog post</h2>
-    <div class="blog-post">
-    --%>
-    <%--<h2 class="blog-post-title">Another blog post</h2>--%>
-    <%--<p class="blog-post-meta">December 23, 2013 by <a href="#">Jacob</a></p>--%>
-
-    <div class="row">
-        <div class="col-md-8 blog-main">
+    <div class="col-md-4">
+        <div class="row blog-main">
             <p>
                 Tendo em vista de que não era possível extrair todas as possíveis amostras de tamanho 15 da
-                população, mas verificando o comportamento de 500 amostras, percebeu-se que o comportamento
-                dos estimadores
+                população, pois o número de combinações possíveis é muito grande, verificou-se o
+                comportamento de 500 amostras do mesmo tamanho, chegando aos seguintes valores:
             </p>
-        </div><!-- /.blog-post -->
+        </div>
 
-        <div class="col-md-4">
-            <table class="table table-striped table-bordered" id="tabela_analise">
+        <div class="row">
+            <div class="page-header">
+                <h4>Distribuição Amostral Para 500 Amostras n=15</h4>
+            </div>
+            <table class="table table-striped table-bordered" id="tabela_amostras">
                 <thead>
                 <tr>
+                    <th></th>
                     <th>Média</th>
                     <th>Desvio-Padrão</th>
                 </tr>
                 </thead>
                 <tbody>
+                <tr>
+                    <td><strong>População</strong></td>
+                    <td id="td_tabela_media_xnormal"></td>
+                    <td id="td_tabela__dp_xnormal"></td>
+                </tr>
+                <tr>
+                    <td><strong>Amostra</strong></td>
                     <td id="td_tabela_analise_media"></td>
                     <td id="td_tabela_analise_dp"></td>
-                </tbody>
-            </table>
-        </div>
-
-    </div>
-
-    <div class="row col-md-12">
-        <a class="btn btn-primary btn-lg" id="botao_atualizar_comportam" role="button">Novas Amostras</a>
-        <br>
-        <br>
-    </div>
-
-    <div class="page-header">
-        <h2>500 amostras aleatórias de tamanho 15</h2>
-    </div>
-
-    <div class="row">
-
-    </div>
-
-    <div class="page-header">
-        <h3>500 amostras aleatórias de tamanho 15</h3>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            <table class="table table-striped table-bordered" id="tabela_comport_estim">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Amostra</th>
-                    <th>Média</th>
-                    <th>Desvio-Padrão</th>
                 </tr>
-                </thead>
-                <tbody>
+
 
                 </tbody>
             </table>
         </div>
+
+        <div class="row blog-main">
+            <p>
+                Ao atualizar as amostras, percebemos que, seguindo o teorema do limite central, o comportamento dos
+                estimadores permaneceu com os valores em torno dos valores da população. Sendo assim, se assemelham à teoria.
+            </p>
+
+            <p>
+                Há um botão para se atualizar as amostras, e assim verificar o comportamento com outros valores.
+            </p>
+        </div>
     </div>
+
+    <div class="col-md-8">
+        <a class="btn btn-primary btn-lg" id="botao_atualizar_comportam" role="button">Novas Amostras</a>
+
+        <div class="page-header">
+            <h3>500 amostras aleatórias de tamanho 15</h3>
+        </div>
+
+        <table class="table table-striped table-bordered" id="tabela_comport_estim">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Amostra</th>
+                <th>Média</th>
+                <th>Interv Confiança (95%)</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+        </div>
 
 </div>
 
