@@ -5,13 +5,16 @@ import logica.Dados;
 import logica.Amostra;
 import logica.Frequencia;
 import logica.IntervConfianca;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import util.Estatistica;
+import util.LogAcesso;
 import util.Ordenacao;
 import util.arquivo.LeituraPlanilha;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -23,7 +26,11 @@ import java.util.*;
 
 @Controller
 public class ServletPrincipal {
-//    private static Logger logger = Logger.getLogger(ServletPrincipal.class);
+
+    private static Logger logger = Logger.getLogger(ServletPrincipal.class);
+    private static Logger loggerInfo = Logger.getLogger("infoFile");
+    private static Logger loggerErro = Logger.getLogger("errorFile");
+
     private ArrayList<Dados> listaDados;
     private Map<String, Object> map;
     private ArrayList<Integer> listaIdadeCandA;
@@ -41,7 +48,26 @@ public class ServletPrincipal {
     private double varianciaC;
     private double desvioPadraoC;
 
-    private void parametrosPopulacionais() throws UnsupportedEncodingException {
+    private void parametrosPopulacionais() {
+
+//        logger1.debug("This is a debug 1");
+//        logger1.info("This is a information 1");
+//        logger1.warn("This is a warning 1");
+//        logger1.error("This is an error 1");
+//        logger1.fatal("This is a fatal 1");
+
+//        logger2.debug("This is another debug 2");
+//        logger2.info("This is another information 2");
+//        logger2.warn("This is another warning 2");
+//        logger2.error("This is another error 2");
+//        logger2.fatal("This is another fatal 2");
+
+        logger.debug("This is a debug 1");
+        loggerInfo.info("This is a information 1");
+        logger.warn("This is a warning 1");
+        loggerErro.error("This is an error 1");
+        logger.fatal("This is a fatal 1");
+
         listaDados = new LeituraPlanilha().lerPlanilha();
 
         Estatistica estatistica = new Estatistica();
@@ -75,9 +101,9 @@ public class ServletPrincipal {
     }
 
     @RequestMapping("home")
-    public ModelAndView paginaPrincipal() throws UnsupportedEncodingException {
+    public ModelAndView paginaPrincipal(HttpServletRequest request) throws UnsupportedEncodingException {
         ModelAndView mv = new ModelAndView();
-
+        LogAcesso.registra(request);
         parametrosPopulacionais();
 
         mv.setViewName("home");

@@ -1,6 +1,7 @@
 package util.arquivo;
 
 import logica.Dados;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -15,7 +16,9 @@ import java.util.ArrayList;
 
 public class LeituraPlanilha {
 
-    public ArrayList<Dados> lerPlanilha() throws UnsupportedEncodingException {
+    private static Logger logger = Logger.getLogger("logErro");
+
+    public ArrayList<Dados> lerPlanilha() {
         int linha = 1;
         int colunaIdade = 1;
         int colunaCandidato = 2;
@@ -41,7 +44,7 @@ public class LeituraPlanilha {
                             celulaCandidato.getStringCellValue());
                     listaDados.add(dados);
                 } catch (NullPointerException e) {
-                    System.out.println("NullPointerException - Linha: " + linha);
+                    logger.error("NullPointerException ao ler a planilha - Linha: " + linha);
                 }
                 linha++;
                 cont++;
@@ -53,9 +56,9 @@ public class LeituraPlanilha {
             outFile.close();
 
         } catch (FileNotFoundException e) {
-            System.out.println("Arquivo [" + caminhoPlanilha + "] não encontrado!");
+            logger.error("Arquivo [" + caminhoPlanilha + "] não encontrado!");
         } catch (IOException e) {
-            System.out.println("Houve um erro ao ler a planilha!");
+            logger.error("Houve um erro ao ler a planilha! - " + e.getMessage());
         }
         return listaDados;
     }

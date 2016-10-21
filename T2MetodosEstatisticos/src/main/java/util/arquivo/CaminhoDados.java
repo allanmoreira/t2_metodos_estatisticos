@@ -8,7 +8,9 @@ import java.net.URLDecoder;
  * Created by allanmoreira on 15/10/16.
  */
 public class CaminhoDados {
-    public String caminhoPlanilhaDados() throws UnsupportedEncodingException {
+    public String caminhoPlanilhaDados() {
+//            throws UnsupportedEncodingException {
+        /*
         String path = this.getClass().getClassLoader().getResource("").getPath();
         String fullPath = URLDecoder.decode(path, "UTF-8");
         String pathArr[] = fullPath.split("/WEB-INF/classes/");
@@ -21,7 +23,7 @@ public class CaminhoDados {
                 "dados" +
                 File.separatorChar +
                 "Trabalho_T2.xls";
-
+        */
         return "/home/servidor_publico/glassfish4/glassfish/domains/domain1/applications/T2MetodosEstatisticos/dados/Trabalho_T2.xls";
     }
 }
